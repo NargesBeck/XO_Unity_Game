@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class ActionManager : MonoBehaviour
@@ -12,5 +11,10 @@ public class ActionManager : MonoBehaviour
     public void ButtonCellClick(int index)
     {
         Manager.Instance.PanelGameplay.HandleCellClick(index);
+    }
+
+    public void ButtonPlayAgain()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

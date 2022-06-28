@@ -20,7 +20,7 @@ public class UIPanel : MonoBehaviour
         MyPanelGameObject.SetActive(true);
     }
 
-    protected virtual void HidePanel()
+    public virtual void HidePanel()
     {
         MyPanelGameObject.SetActive(false);
     }

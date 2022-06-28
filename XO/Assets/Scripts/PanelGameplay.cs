@@ -18,9 +18,10 @@ public class PanelGameplay : UIPanel
 
     public void HandleCellClick(int index)
     {
-        // if cell is empty
-
         Index1Dto2D(index, out int row, out int col);
+
+        if (!IsCellEmpty(row, col)) return;
+
         char value = Manager.Instance.PlayerOne.currentXO.ToString()[0];
 
         if (Manager.Instance.currentPlayer == Manager.Players.First)
@@ -29,12 +30,31 @@ public class PanelGameplay : UIPanel
             value = Manager.Instance.PlayerTwo.currentXO.ToString()[0];
 
         cellsValueArr[row, col] = value;
-
-        ChangeTurns();
-
         cellsTexts[index].text = value.ToString().ToUpper();
 
-        // detect winner
+        if (Manager.Instance.currentPlayer == Manager.Players.First)
+        {
+            if (Manager.Instance.PlayerOne.DidIWin(cellsValueArr, row, col))
+            {
+                Manager.Instance.GameOver(Manager.Players.First);
+                return;
+            }
+        }
+        else
+        {
+            if (Manager.Instance.PlayerTwo.DidIWin(cellsValueArr, row, col))
+            {
+                Manager.Instance.GameOver(Manager.Players.Second);
+                return;
+            }
+        }
+
+        // if we get here, no one won
+        if (IsBoardFull())
+            Manager.Instance.GameOver(Manager.Players.None);
+
+        else
+            ChangeTurns();
     }
 
     public void Index1Dto2D(int input, out int row, out int col)
@@ -55,5 +75,21 @@ public class PanelGameplay : UIPanel
             Manager.Instance.currentPlayer = Manager.Players.First;
             turnLbl.text = "First Player";
         }
+    }
+
+    private bool IsCellEmpty(int row, int col)
+        => cellsValueArr[row, col] != 'X' && cellsValueArr[row, col] != 'O';
+
+    private bool IsBoardFull()
+    {
+        for (int row = 0; row < 3; row++)
+        {
+            for (int col = 0; col < 3; col++)
+            {
+                if (IsCellEmpty(row, col))
+                    return false;
+            }
+        }
+        return true;
     }
 }

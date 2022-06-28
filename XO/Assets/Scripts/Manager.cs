@@ -18,12 +18,13 @@ public class Manager : MonoBehaviour
     public Player PlayerTwo;
     public PanelPickXO PanelPickXO;
     public PanelGameplay PanelGameplay;
+    public PanelGameOver PanelGameOver;
     #endregion
 
     public const int MaxPlayers = 2;
     public enum Players
     {
-        First, Second
+        First, Second, None
     }
 
     public Players currentPlayer = Players.First;
@@ -31,5 +32,17 @@ public class Manager : MonoBehaviour
     private void Start()
     {
         PanelPickXO?.ShowPanel();
+    }
+
+    public void GameOver(Players winner)
+    {
+        if (winner == Players.First)
+            PlayerOne.PlayerWon();
+        else if (winner == Players.Second)
+            PlayerTwo.PlayerWon();
+
+        PanelGameplay.HidePanel();
+        PanelGameOver.ShowPanel();
+        PanelGameOver.AssignPanel(winner);
     }
 }
