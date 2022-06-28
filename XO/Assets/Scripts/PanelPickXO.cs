@@ -1,18 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class PanelPickXO : MonoBehaviour
+public class PanelPickXO : UIPanel
 {
-    // Start is called before the first frame update
-    void Start()
+    enum States
     {
-        
+        Player1Choosing, Off
+    }
+    private States currentState;
+
+
+    public override void ShowPanel()
+    {
+        currentState = States.Player1Choosing;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void HandleButtonChooseXOClicked(XO xo)
     {
-        
+        if (currentState == States.Player1Choosing)
+        {
+            currentState = States.Off;
+            Manager.Instance.PlayerOne.currentXO = xo;
+            Manager.Instance.PlayerTwo.currentXO = (xo == XO.X) ? XO.O : XO.X;
+
+            Manager.Instance.PanelGameplay.ShowPanel();
+            HidePanel();
+        }
     }
 }
